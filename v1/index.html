@@ -11,7 +11,7 @@
             -ms-user-select: none;
             user-select: none;
         }
-        button {
+        button:not(.coffee) {
             font-family: Verdana, Geneva, Tahoma, sans-serif;
             font-size: large;
             padding: 10px;
@@ -40,6 +40,9 @@
             font-size:x-large;
             background-color: lightblue;
             color: black;
+        }
+        input:invalid {
+            color: red;
         }
         #footer {
             height: 30px;
@@ -727,7 +730,7 @@
             if (cardind < 0 || cardind >= numqs)
                 document.getElementById("question").innerHTML = "#" + document.getElementById("enteredcardnum").value + "<br><b>does not exist</b><br>" +
                 "There are only " + numqs + " cards in the " + document.getElementById("deckdd").value + " deck."
-            else {
+            else if (/^-?\d+$/.test(cardind)) {
                 if (!back)
                     stack.push(current)
                 current = cardind
@@ -743,13 +746,23 @@
                 if (viewed == numqs)
                     document.getElementById("drawbutton").disabled = true;
             }
-            document.getElementById("undobtn").disabled = stack.length <= 1; 
+            document.getElementById("backbtn").disabled = stack.length <= 1; 
+
+            //testing zoom???
+                console.log(document.querySelector('meta[name="viewport"]'))
+            const viewportMeta = document.querySelector('meta[name="viewport"]');
+            if (viewportMeta) {
+                console.log('reset zoom')
+                viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0');
+            }
         }
         let resetDeck = () => {
             viewedIndex = questions.map((val,i) => [false, i])
             viewed = 0;
-            document.getElementById("question").innerHTML = "<div style='width:100%;height:100%;line-height:100%;font-size:xxx-large;color:black;'><b><br>"+
-                "Curious<br>Convo<br>Companion</b><div style='font-size:small'>by coderystal</div></div>" + 
+            document.getElementById("question").innerHTML = "<div style='width:100%;height:100%;line-height:100%;font-size:xxx-large;'><b><br>"+
+                "Curious<br>Convo<br>Companion</b><div style='font-size:small'>by coderystal</div>" +
+                "<button class='coffee' onclick='event.stopPropagation()'><a href='https://buymeacoffee.com/jeyc35gujd' target='_blank' style='text-decoration: none;'>☕ Buy me a coffee</a></button>" + 
+                "</div>" + 
                 "<span style='position:absolute;bottom:0;right:0;margin:5px;font-size:medium;'>" + document.getElementById("deckdd").value + " deck<span>"
             document.getElementById("numviewed").innerHTML = viewed
             document.getElementById("resetbutton").disabled = true;
@@ -757,7 +770,9 @@
             document.getElementById("enteredcardnum").value = ""
             document.getElementById("enteredcardnum").max = numqs
             current = undefined
-            document.getElementById('undobtn').disabled = true
+            document.getElementById('backbtn').disabled = true
+            document.getElementById("question").style.color = "black"
+            stack = []
         }
 
         document.onkeypress = function (e) {
@@ -803,7 +818,7 @@
         <div id="question" onclick="drawNewCard(getCardInd())"></div>
         
         <div>
-            <button id = 'undobtn' onclick="drawNewCard(stack.pop(), true)">Undo</button>
+            <button id = 'backbtn' onclick="drawNewCard(stack.pop(), true)">Back</button>
             <button id="drawbutton" onclick="drawNewCard(getCardInd())">Draw New Card</button>
         </div>
         <div>
@@ -811,7 +826,7 @@
             /<button id="numcards" onclick="popupAll()"></button> cards seen
 
         </div>
-        <div>Find Card # <input id="enteredcardnum" type="text" pattern="[0-9]{1-3}" inputmode="numeric" size=3 onChange="drawNewCard(event.currentTarget.value -1)"></div>
+        <div>Find Card # <input id="enteredcardnum" type="text" pattern="[0-9]{1,3}" inputmode="numeric" size="3" onChange="drawNewCard(event.currentTarget.value -1)"></div>
         <div>Use <select id="deckdd"><option>complete</option><option>!?</option></select> deck</div>
         <script>
             document.getElementById("numcards").innerHTML = numqs
