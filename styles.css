@@ -1,0 +1,224 @@
+    html {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        background-color: black;
+        color: grey;
+        font-size: max(2vh, 15px);
+
+        -moz-user-select: -moz-none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    
+    #screentoggle {
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: flex;
+        align-items: center;
+        filter: invert(1);
+        opacity: .5;
+    }
+
+    #navbar * {
+        margin-left: 10px;
+        margin-right: 10px;
+        text-decoration: underline;
+        font-size: max(1.5vh, 15px);
+        opacity: 70%;
+    }
+
+    #navbar {
+        padding-bottom: 30px;
+    }
+
+    button:not(.coffee):not(.screentoggle),
+    input,
+    select {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-size: max(2vh, 15px);
+        height: max(5%, 25px);
+    }
+
+    button:not(.coffee):not(.screentoggle),
+    select {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 4%;
+        padding-right: 4%;
+    }
+
+    #container {
+        max-width: 80%;
+        max-width: 900px;
+        margin: auto;
+        max-height: 95%;
+        overflow: auto;
+    }
+
+    #container>* {
+        text-align: center;
+        margin: 10px;
+    }
+
+    #question {
+        position: relative;
+        padding: 5%;
+        border: 5px solid black;
+        border-radius: 25px;
+        overflow: auto;
+        font-size: 4vh;
+        background-color: lightblue;
+        color: black;
+        display: flex;
+        justify-content: center;
+    }
+
+    .cardq {
+        margin: auto;
+    }
+    /* mobile */
+    @media (min-height: 1000px) {
+        #question {
+            height: 55%;
+        }
+
+        #footer {
+            font-size: 1.3vh;
+        }
+    }
+    /* desktop */
+    @media (max-height: 1000px) {
+        #question {
+            height: 35%;
+        }
+
+        #footer {
+            font-size: max(2vh, 15px);
+        }
+    }
+
+    .coffee {
+        position: absolute;
+        top: 0;
+        margin: 5px;
+        padding-bottom: 5px;
+        border-radius: 100px;
+        border: 1px solid black;
+        font-size: max(2vh, 15px);
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .cardatt {
+        position: absolute;
+        bottom: 0;
+        margin: 5px;
+        font-size: max(2vh, 15px);
+    }
+
+    input:invalid {
+        color: red;
+    }
+
+    #footer {
+        position: fixed;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    img {
+        width: 20px;
+        height: 20px;
+        margin: 5px;
+    }
+
+    #github {
+        filter: invert(1);
+    }
+
+
+    
+    .modal {
+        display: none;
+        align-items: center;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(8, 57, 21, 0.4);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        min-width: 40%;
+        max-width: 80%;
+        max-height: 80%;
+        overflow: auto;
+        color: black;
+        text-align: center;
+        font-size: max(2vh, 15px);
+    }
+
+    table {
+        width: 100%;
+        border-spacing: 0px;
+    }
+
+    table * {
+        color: black;
+        font-size: max(2vh, 15px);
+    }
+
+    td:nth-child(1) {
+        vertical-align: text-top;
+        color: rgb(120, 120, 120);
+        text-align: right;
+        padding-right: 5px;
+    }
+
+    tr:nth-child(even) {
+        background-color: lightblue;
+    }
+
+    th {
+        background-color: white;
+        position: sticky;
+        top: -20px; /*matches modal-content padding*/
+        border-bottom: 5px solid black;
+    }
+
+
+    .dislikes {
+        color: #8F3001;
+    }
+    .experience {
+        color: #025C73;
+    }
+    .fantasy {
+        color: #73026F;
+    }
+    .goals {
+        color: #027337;
+    }
+    .identity {
+        color: #590273;
+    }
+    .likes {
+        color: #730251;
+    }
+    .people {
+        color: #736402;
+    }
+    .tendencies {
+        color: #734802;
+    }
+    .worldview {
+        color: #026073;
+    }

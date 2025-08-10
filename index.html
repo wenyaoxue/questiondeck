@@ -1,0 +1,170 @@
+<html>
+<link rel="stylesheet" href="styles.css">
+<script src="questionArray.js"></script>
+<script src="getInfoCards.js"></script>
+<script src="getPopups.js"></script>
+<script src="a11y.js"></script>
+<script src="toggleFullscreen.js"></script>
+
+<div id="infomodal" class="modal" onclick="document.getElementById('infomodal').style.display = 'none';">
+    <div class="modal-content" onclick="event.stopPropagation()">
+    </div>
+    <script>
+        let modal = document.getElementById('infomodal')
+        function closepopup() {
+            modal.style.display = "none";
+        }
+    </script>
+</div>
+
+<script>
+    let questions = completequestions
+    let viewedIndex;
+    let numqs = questions.length
+    let getCardInd = () => {
+        if (viewed == numqs)
+            return current
+        let newIndexes = viewedIndex.filter((pair) => !pair[0]).map(pair => pair[1])
+        let newIndex = newIndexes[parseInt(Math.random() * newIndexes.length)]
+        return newIndex
+    }
+    let drawNewCard = (cardind, back) => {
+        if (/^\d+$/.test(cardind)) { //if cardind is a positive integer
+            if (cardind < 0 || cardind >= numqs) {
+                document.getElementById("question").innerHTML = "<br><div class='cardq'>#" +
+                    document.getElementById("enteredcardnum").value + "<br><b>does not exist</b><br>" +
+                    "There are only " + numqs + " cards in the " + document.getElementById("deckdd").value + " deck."
+                document.getElementById("question").style.color = "black"
+            }
+            else {
+                if (!back)
+                    stack.push(current)
+                current = cardind
+                let qust = questions[current]
+                document.getElementById("question").innerHTML = "<span style = 'position:absolute;top:0;margin:5px;font-size: 2vh;'>#" + (current + 1) + "</span>" +
+                    "<div class='cardq' style='color:" + ((qust[2]) ? "red" : "black") + "'><b>" + qust[0] +
+                    "</b></div><span class = 'cardatt " + qust[1] + "'>" + qust[1] + "<span>"
+                if (!viewedIndex[current][0])
+                    viewed++
+                viewedIndex[current][0] = true
+                document.getElementById("numviewed").innerHTML = viewed + " cards seen"
+                if (viewed > 0)
+                    document.getElementById("resetbutton").disabled = false;
+                if (viewed == numqs)
+                    document.getElementById("drawbutton").disabled = true;
+            }
+            document.getElementById("backbtn").disabled = stack.length <= 1;
+            document.getElementById("enteredcardnum").value = (cardind + 1)
+        }
+    }
+    let resetDeck = () => {
+        viewedIndex = questions.map((val, i) => [false, i])
+        viewed = 0;
+        showTitle()
+        document.getElementById("numviewed").innerHTML = viewed + " cards seen"
+        document.getElementById("resetbutton").disabled = true;
+        document.getElementById("drawbutton").disabled = false;
+        document.getElementById("enteredcardnum").value = ""
+        document.getElementById("enteredcardnum").max = numqs
+        current = undefined
+        document.getElementById('backbtn').disabled = true
+        stack = []
+        document.querySelector(".coffee").style.display = ''
+    }
+</script>
+<div id="container" onclick="exitFullScreen()">
+    <button id="screentoggle" onclick="toggleScreen(); event.stopPropagation();">
+        <img id="screentoggleimg" src="exitFullscreen.png">
+        toggle screen
+        <span id="screentoggleA11y"></span>
+    </button>
+    <div id="navbar" class="controls">
+        <a id='about' onclick='showAbout()'>About</a>
+        <a id='title' onclick='showTitle()'>Title</a>
+        <a id='instructions' onclick='showInstructions()'>Instructions</a>
+        <a id='coderystal' onclick='showCoderystal()'>Coderystal</a>
+    </div>
+    <div class="controls">
+        <button id="resetbutton" onclick="resetDeck()">Reset History</button>
+        <button id='backbtn' onclick="drawNewCard(stack.pop(), true)">Back</button>
+        <button id="numviewed" onclick="popupViewed()"></button>
+    </div>
+    <div id="question" onclick="drawNewCard(getCardInd()); event.stopPropagation();"></div>
+    <div class="controls">
+        <button id="drawbutton" onclick="drawNewCard(getCardInd())">Draw New Card</button>
+        <div style="display: inline-block; right: 0"># <input id="enteredcardnum" type="text" pattern="[0-9]+"
+                inputmode="numeric" size="4" onChange="drawNewCard(event.currentTarget.value -1)"></div>
+    </div>
+    <div class="controls">
+        <select id="deckdd">
+            <option>complete</option>
+            <option style="color: red;">react!</option>
+        </select> deck:
+        <button id="numcards" onclick="popupAll()"></button>
+    </div>
+
+
+    <script>
+        document.getElementById("numcards").innerHTML = numqs + " cards"
+        let decks = [...new Set(questions.map((val) => val[1]))].sort()
+        let deckdd = document.getElementById("deckdd")
+        let stack = []
+        for (let i in decks) {
+            let opt = document.createElement("option")
+            opt.innerHTML = decks[i]
+            opt.classList.add(decks[i])
+            deckdd.appendChild(opt)
+        }
+        deckdd.onchange = (e) => {
+            let deck = e.currentTarget.value
+            questions = completequestions.filter((val) => deck == "complete" || (deck == "react!" && val[2]) || val[1] == deck)
+            numqs = questions.length
+            document.getElementById("numcards").innerHTML = numqs + " cards"
+            resetDeck()
+        }
+    </script>
+</div>
+
+<div id="footer" class="controls">
+    made by Crystal Wen, to present a collection of invasive questions I've selected.
+    sources of truth (in regards to this deck):
+    <a href="https://github.com/coderystal/questiondeck/tree/main" target="_blank"><img id="github"
+            src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg"></a>
+    <a href="https://docs.google.com/spreadsheets/d/1vhKC0KtDO12IpI9UygmImvsvWaJ1RaYuBskVht1--8w/edit?usp=sharing"
+        target="_blank"><img id="youtube" src="https://img.icons8.com/color/512/google-sheets.png"></a>
+
+</div>
+<script id="start">
+
+    let current;
+    let viewed;
+
+    resetDeck()
+    document.querySelector(".coffee").style.display = 'none'
+
+
+    //everything below doesn't do anything at the moment, can be used in case of wanting to demonstrate some questions
+    let demoIndexes = [110, 89, 344, 7, 534, 148, 270, 471, 222, 442, 615, 298, 282, 331, 26, 57, 514, 175, 291, 35]
+    function demoQ(demoI) {
+        if (demoI == demoIndexes.length) {
+            resetDeck()
+            exitFullScreen()
+            document.getElementById("question").style.width = ""
+        } else {
+            if (demoI == 0) {
+                fullScreen()
+                document.getElementById("question").style.width = "40%"
+            }
+            setTimeout(function () {
+                drawNewCard(demoIndexes[demoI]);
+                demoQ(demoI + 1)
+            }, 50)
+        }
+    }
+    // fullScreen()
+    exitFullScreen()
+    //demoQ(0) for a quick flip through selected cards, focused on the card element
+
+</script>
+
+</html>
