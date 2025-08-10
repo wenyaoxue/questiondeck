@@ -5,22 +5,21 @@ function exitFullScreen() {
     for (let controlElement of document.getElementsByClassName("controls")) {
         controlElement.style.display = ''
     }
-    // document.getElementById("question").style.height = ""
-    // document.getElementById("question").style.margin = ""
+    document.getElementById("question").style.height = ""
+    document.getElementById("question").style.margin = ""
     document.getElementById("container").style.alignContent = ""
     document.getElementById("container").style.height = ""
     document.getElementById("container").style.maxHeight = ""
     document.getElementById("screentoggleimg").src = "fullscreen.png"
     document.getElementById("screentoggle").style.opacity = "0.5"
-    // document.getElementById("container").style.backgroundColor = "red"
 
 }
 function fullScreen() {
     for (let controlElement of document.getElementsByClassName("controls")) {
         controlElement.style.display = 'none'
     }
-    // document.getElementById("question").style.height = "70%"
-    // document.getElementById("question").style.margin = "auto"
+    document.getElementById("question").style.height = "70%"
+    document.getElementById("question").style.margin = "auto"
     document.getElementById("container").style.alignContent = "center"
     document.getElementById("container").style.height = "100%"
     document.getElementById("container").style.maxHeight = "100%"
@@ -33,7 +32,7 @@ function fullScreen() {
             }, 50)
         }
     }
-    // reduceScreenToggleOpacityTo0(0.5)
+    reduceScreenToggleOpacityTo0(0.5)
 }
 
 function toggleScreen() {
